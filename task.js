@@ -25,7 +25,6 @@ const  watcher = async () => {
                         Comments Count: ${d.comments}
                         `,
                 person_id: p.ppdvId,
-                user_id: p.ppdvId,
             }
             await createActivity(activityObject)
             console.log(`Activity with subject ${activityObject.subject} for Person ${updatedPerson.name}`);
