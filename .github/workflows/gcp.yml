@@ -1,5 +1,5 @@
----
 name: Build and Push Image to GCP (Google Cloud Platform)
+
 on:
   push:
     branches: [main]
