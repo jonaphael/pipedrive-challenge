@@ -8,7 +8,6 @@ const pipedrive_token_api = process.env.PIPEDRIVE_TOKEN
  * @param {string} name name of the person
  */
 const createPerson = async (name) => {
-
   try {
     return axios.post(
       `${pipedrive_base_url}/persons?api_token=${pipedrive_token_api}`,
@@ -22,13 +21,14 @@ const createPerson = async (name) => {
 };
 
 /**
+ * Create an activity in pipedrive CRM
  * 
- * @param {*} activityObject 
+ * @param {*} activityObject // containing the subject of the activity
+ *                           // also a note and the person_id for this activity
  * @returns 
  */
 const createActivity = async (activityObject) => {
   try {
-    console.log('created', activityObject)
     return axios.post(
       `${pipedrive_base_url}/activities?api_token=${pipedrive_token_api}`, activityObject)
   } catch (error) {

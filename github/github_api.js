@@ -1,8 +1,10 @@
 const Octokit = require('octokit').Octokit
 
+/**
+ * Class that handle the github instance
+ */
 class GitHubApi {
     static _instance = undefined;
-
     static getInstance() {
         if (this._instance)
             return this._instance

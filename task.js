@@ -4,6 +4,12 @@ const Person = require('./model/Person')
 const moment = require('moment');
 const { createActivity } = require('./pipedrive/pipedrive_api');
 
+/**
+ * Watcher task thats fetch all the user from the database
+ * and fetch their gists since the last visit (last time this functions ran)
+ * update the lastVisit field of the user in the database and create a new activity
+ * for each gist
+ */
 const  watcher = async () => {
 
     const persons = await Person.find({ isDeleted: false });
