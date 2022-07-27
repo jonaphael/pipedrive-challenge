@@ -13,9 +13,10 @@ class GitHubApi {
         return this._instance;
     }
     
-    static async getPublicGists(username = '') {
-        return await this.getInstance().request('GET /users/{username}/gists', {
-            username
+    static async getPublicGists(username = '', since='') {
+        return await this.getInstance().request(`GET /users/{username}/gists?since={since}`, {
+            username,
+            since
         })
     }
 }

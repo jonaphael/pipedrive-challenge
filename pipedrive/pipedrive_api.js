@@ -1,7 +1,7 @@
 const axios = require("axios");
 
-const pipedrive_base_url = "https://api.pipedrive.com/v1/";
-const pipedrive_token_api = process.env.GITHUB_TOKEN
+const pipedrive_base_url = "https://api.pipedrive.com/v1";
+const pipedrive_token_api = process.env.PIPEDRIVE_TOKEN
 
 /**
  *  create a person in pipedrive CRM
@@ -9,16 +9,31 @@ const pipedrive_token_api = process.env.GITHUB_TOKEN
  */
 const createPerson = async (name) => {
 
-    console.log(pipedrive_token_api)
-  await axios.post(
-    `${pipedrive_base_url}/person?api_token=${pipedrive_token_api}`,
-    {
-      name,
-    }
-  ).then(data => console.log(data)).catch(err => console.error(err))
-//   console.log(status, data);
+  try {
+    return axios.post(
+      `${pipedrive_base_url}/persons?api_token=${pipedrive_token_api}`,
+      {
+        name,
+      }
+    )
+  } catch (error) {
+    return error
+  }
 };
 
-const createActivity = async (activityObject) => {};
+/**
+ * 
+ * @param {*} activityObject 
+ * @returns 
+ */
+const createActivity = async (activityObject) => {
+  try {
+    console.log('created', activityObject)
+    return axios.post(
+      `${pipedrive_base_url}/activities?api_token=${pipedrive_token_api}`, activityObject)
+  } catch (error) {
+    return error
+  }
+ };
 
 module.exports = { createPerson, createActivity };
