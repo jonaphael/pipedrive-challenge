@@ -63,3 +63,4 @@ jobs:
           --platform managed \
           --allow-unauthenticated \
           --project $PROJECT_ID
+          --port=$APP_PORT
