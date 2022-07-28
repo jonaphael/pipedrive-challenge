@@ -25,7 +25,6 @@ const { createPerson } = require('../pipedrive/pipedrive_api')
  *         description: post can not be found
  */
 router.get('/', async (req, res) => {
-    console.log('reached here')
     const persons = await Person.find({ isDeleted: false });
     return res.send(persons)
 })
@@ -103,9 +102,25 @@ router.post('/add', validateBody, async (req, res) => {
 })
 
 /**
- * Delete a Username or Person to stop monitoring his/her gists
+ * @swagger
+ * /api/person/{username}:
+ *   delete:
+ *     summary: Delete a user from the system from been monitored
+ *     tags: [Person]
+ *     parameters:
+ *      - in: path
+ *        name: username
+ *        description: username of the user
+ *        required: true
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: Detail of the user that are been monitored and his gists since last visit
+ *       404:
+ *         description: User not found in the database
  */
-router.delete('/remove/:name', (req, res) => {
+router.delete('/remove/:username', (req, res) => {
     return res.send({})
 })
 
