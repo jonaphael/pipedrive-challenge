@@ -62,5 +62,5 @@ jobs:
           --image gcr.io/$PROJECT_ID/$IMAGE_NAME:latest \
           --platform managed \
           --allow-unauthenticated \
-          --project $PROJECT_ID
+          --project $PROJECT_ID \
           --port=$APP_PORT
