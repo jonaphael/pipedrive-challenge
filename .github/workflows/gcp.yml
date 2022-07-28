@@ -22,12 +22,12 @@ jobs:
     
     - name: Build the docker Image
       run: |-
-        docker build -t $IMAGE_NAME:latest .
+        docker build -t $IMAGE_NAME:$GITHUB_SHA .
     
     - name: Configure Docker Client
       run: |-
         gcloud auth configure-docker --quiet
-        gcloud auth configure-docker europe-north1-docker.pkg.dev -- quiet
+        gcloud auth configure-docker europe-north1-docker.pkg.dev --quiet
 
     - name: Push the Docker Image to GCR (Google Container Registry)
       env:
