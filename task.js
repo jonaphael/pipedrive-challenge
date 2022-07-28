@@ -16,13 +16,13 @@ const  watcher = async () => {
     persons.forEach(async p => {
 
         const lastVisit = moment(p.lastVisit).toISOString()
-        const { data } = await GitHubApi.getPublicGists(p.name, p.lastVisit ? lastVisit: undefined)
+        const { data } = await GitHubApi.getPublicGists(p.username, p.lastVisit ? lastVisit: undefined)
         const updatedPerson = await p.updateOne({ lastVisit: moment()})
         
         data.forEach(async d => {
             const activityObject = {
                 subject: `Github Gist (${d.id})` ,
-                note: `Owner: ${p.name} <br> 
+                note: `Owner: ${p.username} <br> 
                         Description:${d.description} <br> 
                         Pull requests URL: ${d.git_pull_url} <br> 
                         Comments URL: ${d.comments_url} <br> 
@@ -33,7 +33,7 @@ const  watcher = async () => {
                 person_id: p.ppdvId,
             }
             await createActivity(activityObject)
-            console.log(`Activity with subject ${activityObject.subject} for Person ${updatedPerson.name}`);
+            console.log(`Activity with subject ${activityObject.subject} for Person ${updatedPerson.username}`);
         })
     })
 }

@@ -7,17 +7,16 @@ const pipedrive_token_api = process.env.PIPEDRIVE_TOKEN
  *  create a person in pipedrive CRM
  * @param {string} name name of the person
  */
-const createPerson = async (name) => {
-  try {
+const createPerson = (username) => {
+  console.log(`Creating person with ID: ${username}`)
     return axios.post(
       `${pipedrive_base_url}/persons?api_token=${pipedrive_token_api}`,
       {
-        name,
+        name: username,
       }
-    )
-  } catch (error) {
-    return error
-  }
+    ).then(data => data).catch(err => {
+      throw err
+    })
 };
 
 /**
