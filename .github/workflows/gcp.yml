@@ -22,7 +22,7 @@ jobs:
     
     - name: Build the docker Image
       run: |-
-        docker build -t $IMAGE_NAME:$GITHUB_SHA .
+        docker build -t $IMAGE_NAME:latest .
     
     - name: Configure Docker Client
       run: |-
@@ -30,15 +30,19 @@ jobs:
         gcloud auth configure-docker europe-north1-docker.pkg.dev --quiet
 
     - name: Push the Docker Image to GCR (Google Container Registry)
+      env:
+        GIT_TAG: v0.1.0
       run: |-
-        docker tag $IMAGE_NAME:$GITHUB_SHA gcr.io/$PROJECT_ID/$IMAGE_NAME:$GITHUB_SHA
-        docker tag $IMAGE_NAME:$GITHUB_SHA gcr.io/$PROJECT_ID/$IMAGE_NAME:$GITHUB_SHA
-        docker push  gcr.io/$PROJECT_ID/$IMAGE_NAME:$GITHUB_SHA
-        docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:$GITHUB_SHA
+        docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+        docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+        docker push  gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+        docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
 
     - name: Push the Docker Image to Artifact Registry
+      env:
+        GIT_TAG: v0.1.0
       run: |-
-        docker tag $IMAGE_NAME:$GITHUB_SHA europe-north1-docker.pkg.dev/$PROJECT_ID/$IMAGE_NAME:$GITHUB_SHA
-        docker tag $IMAGE_NAME:$GITHUB_SHA europe-north1-docker.pkg.dev/$PROJECT_ID/$IMAGE_NAME:$GITHUB_SHA
-        docker push  europe-north1-docker.pkg.dev/$PROJECT_ID/$IMAGE_NAME:$GITHUB_SHA
-        docker push europe-north1-docker.pkg.dev/$PROJECT_ID/$IMAGE_NAME:$GITHUB_SHA
+        docker tag $IMAGE_NAME:latest europe-north1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
+        docker tag $IMAGE_NAME:latest europe-north1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
+        docker push  europe-north1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
+        docker push europe-north1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
