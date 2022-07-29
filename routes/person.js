@@ -1,4 +1,6 @@
 const router = require('express').Router()
+const moment = require('moment')
+const GitHubApi = require('../github/github_api')
 const { validateBody } = require('../middlewares/person')
 const Person = require('../model/Person')
 
@@ -51,9 +53,13 @@ router.get('/', async (req, res) => {
 router.get('/:username', async (req, res) => {
     const { username } = req.params
     const person = await Person.findOne({ username, isDeleted: false })
-    if (person) return res.send(person)
+    if (!person) return res.status(404).send({ message: `User ${username} not found ` })
+    
+    const lastVisit = moment(person.lastVisit).toISOString()
+    const { data } = await GitHubApi.getPublicGists(username, person.lastVisit ? lastVisit : undefined)
+    const response = { ...person._doc, gists: data }
+    return res.send(response)
 
-    return res.status(404).send({ message: `User ${username} not found ` })
 })
 
 /**
@@ -103,7 +109,7 @@ router.post('/add', validateBody, async (req, res) => {
 
 /**
  * @swagger
- * /api/person/{username}:
+ * /api/person/remove/{username}:
  *   delete:
  *     summary: Delete a user from the system from been monitored
  *     tags: [Person]
@@ -120,8 +126,14 @@ router.post('/add', validateBody, async (req, res) => {
  *       404:
  *         description: User not found in the database
  */
-router.delete('/remove/:username', (req, res) => {
-    return res.send({})
+router.delete('/remove/:username', async (req, res) => {
+    const { username } = req.params
+    const person = await Person.findOne({ username, isDeleted: false })
+    if (!person) return res.status(404).send({ message: `User ${username} not found ` })
+
+    await person.updateOne({ isDeleted: true })
+
+    return res.send({ message: 'User deleted'})
 })
 
 module.exports = router
